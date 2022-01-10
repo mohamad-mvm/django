@@ -19,7 +19,7 @@ class Product(models.Model):
     last_update = models.DateTimeField(auto_now=True)
     Collection = models.ForeignKey(Collection,on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion,related_name='products')
-
+//test
 
 class Customer(models.Model):
 
