@@ -84,10 +84,25 @@ WSGI_APPLICATION = 'storefront.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mssql',
+        'NAME': 'DJANGO_MSSQL',
+        'HOST': '.',
+        'USER': 'sa',
+        'PASSWORD': '99mv944',
+        'PORT': '',
+
+        'options': {
+            'driver': 'ODBC Driver 13 for SQL Server',
+        }
+
     }
 }
 
