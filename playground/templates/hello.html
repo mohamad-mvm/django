@@ -1,23 +1,24 @@
 <html>
   <head>
     <style>
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-    }
-    
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-    
-    tr:nth-child(even) {
-      background-color: #dddddd;
-    }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
     </style>
-    </head>
+  </head>
   <body>
     {% if name %}
     <h1>Hello {{ name }}</h1>
@@ -25,13 +26,13 @@
     <h1>Hello World</h1>
     {% endif %}
 
-
-    <h2 style="color: crimson;">number of products = {{product_count}}</h2>
+    <h2 style="color: crimson">number of products = {{product_count}}</h2>
     <table>
-      <tr style="background-color:darkslategray;color: aliceblue;">
+      <tr style="background-color: darkslategray; color: aliceblue">
         <th>title</th>
         <th>price</th>
         <th>inventory</th>
+        <th>collection title</th>
       </tr>
       {% for item in products %}
 
@@ -39,13 +40,14 @@
         <td>{{ item.title }}</td>
         <td>{{ item.unit_price }}</td>
         <td>{{ item.inventory }}</td>
+        <td>{{ item.collection.title }}</td>
       </tr>
       {% endfor %}
     </table>
 
-    <h2 style="color: crimson;">number of customer = {{customer_count}}</h2>
+    <h2 style="color: crimson">number of customer = {{customer_count}}</h2>
     <table>
-      <tr style="background-color:darkslategray;color: aliceblue;">
+      <tr style="background-color: darkslategray; color: aliceblue">
         <th>first name</th>
         <th>last name</th>
         <th>email</th>
@@ -60,6 +62,76 @@
       {% endfor %}
     </table>
 
+    <h2 style="color: crimson">number of orders = {{order_count}}</h2>
 
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>order date</th>
+        <th>order id</th>
+        <th>customer name</th>
+        <th>product name</th>
+        <th>price</th>
+        <th>quantity</th>
+        <th>total</th>
+      </tr>
+      {% for order in orders %}
+
+      <tr>
+        <td>{{ order.placed_at }}</td>
+        <td>{{ order.id }}</td>
+        <td>{{ order.customer.first_name }}</td>
+
+        {% if order.orderitem_set.all %}
+
+        <td>
+        {% for item in order.orderitem_set.all %}
+          {{ item.product.title }} 
+          <br>
+        {% endfor %}
+        </td>
+        <td>
+        {% for item in order.orderitem_set.all %}
+          {{ item.unit_price }} 
+          <br>
+        {% endfor %}
+        </td>
+
+        <td>
+        {% for item in order.orderitem_set.all %}
+          {{ item.quantity }} 
+          <br>
+        {% endfor %}
+        </td>
+
+        <td>
+        {% for item in order.orderitem_set.all %}
+          {{ item.quantity}}
+          <br>
+        {% endfor %}
+        </td>
+
+        
+        {% else %}
+        <td>
+          -
+        </td>
+        <td>
+          -
+        </td>
+        <td>
+          -
+        </td> 
+        <td>
+          -
+        </td>
+        {% endif%}
+
+
+
+
+        <!-- <td>{{ item.email }}</td> -->
+      </tr>
+      {% endfor %}
+    </table>
   </body>
 </html>
