@@ -1,9 +1,7 @@
 from django.urls import path
-from django.urls.resolvers import URLPattern
 from . import views
 
-urlpatterns =[
-    path('hello/',views.sayHello),
-    path('mohamad/',views.htmltemp)
-    
+# URLConf
+urlpatterns = [
+    path('hello/', views.say_hello)
 ]

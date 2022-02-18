@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'storefront.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'DJANGO_MSSQL',
+        'NAME': 'storefront',
         'HOST': '.',
         'USER': 'sa',
         'PASSWORD': '99mv944',

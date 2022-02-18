@@ -1,13 +1,65 @@
 <html>
+  <head>
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+    </head>
   <body>
-    {% if firstname %}
-    <h1>hello {{firstname}} {{lastname}}</h1>
-
+    {% if name %}
+    <h1>Hello {{ name }}</h1>
     {% else %}
-
-    <h1>not found</h1>
-
+    <h1>Hello World</h1>
     {% endif %}
+
+
+    <h2 style="color: crimson;">number of products = {{product_count}}</h2>
+    <table>
+      <tr style="background-color:darkslategray;color: aliceblue;">
+        <th>title</th>
+        <th>price</th>
+        <th>inventory</th>
+      </tr>
+      {% for item in products %}
+
+      <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ item.unit_price }}</td>
+        <td>{{ item.inventory }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2 style="color: crimson;">number of customer = {{customer_count}}</h2>
+    <table>
+      <tr style="background-color:darkslategray;color: aliceblue;">
+        <th>first name</th>
+        <th>last name</th>
+        <th>email</th>
+      </tr>
+      {% for item in customers %}
+
+      <tr>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.email }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+
   </body>
 </html>
-
