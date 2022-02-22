@@ -3,5 +3,6 @@ from . import views
 
 # URLConf
 urlpatterns = [
-    path('hello/', views.say_hello)
+    path('database_relational/', views.database_relational),
+    path('Aggregating/', views.Aggregating),
 ]
