@@ -37,7 +37,25 @@ def Aggregating(request):
     pruduct_count=Product.objects.aggregate(Count('id'))
     pruduct_maxid=Product.objects.aggregate(max=Max('id'), min_price=Min('unit_price'))
     pruduct_avg_price=Product.objects.aggregate(avg_price=Avg('unit_price'))
+    pruduct_sum_price=Product.objects.aggregate(sum_price=Sum('unit_price'))
+    product_count_by_collection=Product.objects.filter(collection__id=3).aggregate(Count('id'))
+    # How many orders do we have?
+    order_count = Order.objects.aggregate(order_count = Count('id'))
+    # How many units of product 1 have we sold?
+    product_1_units_sold = OrderItem.objects.filter(product__id=1).aggregate(units_sold=Sum('quantity'))
+
+    # How many orders has customer 1 placed?
+    customer_1_orders = Order.objects.filter(customer__id=1).aggregate(order_count=Count('id'))
+
+    # What is the min, max and average price of the products in collection 3?
+    collection_3_products = Product.objects.filter(collection__id=3).aggregate(min_price=Min('unit_price'), max_price=Max('unit_price'), avg_price=Avg('unit_price'))
+
 
     return render(request, 'Aggregating.html', {'pruduct_count':pruduct_count,
                                                 'pruduct_maxid':pruduct_maxid,
-                                                'pruduct_avg_price':pruduct_avg_price,})
+                                                'pruduct_avg_price':pruduct_avg_price,
+                                                'pruduct_sum_price':pruduct_sum_price,
+                                                'product_count_by_collection':product_count_by_collection,
+                                                'order_count':order_count,
+                                                'product_1_units_sold':product_1_units_sold,
+                                                'customer_1_orders':customer_1_orders,})
