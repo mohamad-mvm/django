@@ -5,4 +5,6 @@ from . import views
 urlpatterns = [
     path('database_relational/', views.database_relational),
     path('Aggregating/', views.Aggregating),
+    path('Annotate/', views.annotate),
+    path('Database_Functions/', views.Database_Functions),
 ]

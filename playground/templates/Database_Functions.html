@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+  </head>
+  <body>
+    
+    
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>customer id</th>
+        <th>customer name</th>
+        <th>customer last name</th>
+        <th>customer full name</th>
+      </tr>
+
+      {% for item in customers %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.full_name }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    
+  </body>
+</html>

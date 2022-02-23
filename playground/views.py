@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q ,F
+from django.db.models import Q ,F,Func,Value
+from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Sum, Avg, Min, Max
-from store.models import Customer, Product,Order,OrderItem,Promotion
+from store.models import Customer, Product,Order,OrderItem
 
 
 def database_relational(request):
@@ -59,3 +59,25 @@ def Aggregating(request):
                                                 'order_count':order_count,
                                                 'product_1_units_sold':product_1_units_sold,
                                                 'customer_1_orders':customer_1_orders,})
+
+
+def annotate(request):
+    # How many orders do we have?
+    order_item = OrderItem.objects.annotate(total_price=F('unit_price')*F('quantity'))
+    t_unitprice=order_item.aggregate(total_unitprice=Sum('unit_price'))
+    t_quantity=order_item.aggregate(total_quantity=Sum('quantity'))
+    total=order_item.aggregate(total=Sum('total_price')) 
+
+    return render(request, 'annotate.html', {'order_item':order_item,
+                                                't_unitprice':t_unitprice,
+                                                't_quantity':t_quantity,
+                                                'total':total,})
+
+
+def Database_Functions(request):
+    # make new field in customer model with name 'full_name' that concatenates first_name and last_name
+    customers = Customer.objects.annotate(full_name=Func(F('first_name'),Value(' '),F('last_name'), function='concat'))
+    # make new field in customer model with name 'full_name' that concatenates first_name and last_name using Concat
+    customers = Customer.objects.annotate(full_name=Concat('first_name',Value(' '),'last_name'))
+
+    return render(request, 'Database_Functions.html', {'customers':customers,})
