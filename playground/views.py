@@ -34,6 +34,10 @@ def database_relational(request):
 
 def Aggregating(request):
 
-    pruduct_count=Product.objects.aggregate(count=Count('id'))
+    pruduct_count=Product.objects.aggregate(Count('id'))
+    pruduct_maxid=Product.objects.aggregate(max=Max('id'), min_price=Min('unit_price'))
+    pruduct_avg_price=Product.objects.aggregate(avg_price=Avg('unit_price'))
 
-    return render(request, 'Aggregating.html', {'pruduct_count':pruduct_count})
+    return render(request, 'Aggregating.html', {'pruduct_count':pruduct_count,
+                                                'pruduct_maxid':pruduct_maxid,
+                                                'pruduct_avg_price':pruduct_avg_price,})
