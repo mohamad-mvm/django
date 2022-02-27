@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+  </head>
+  <body>
+    
+    
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>product id</th>
+        <th>product name</th>
+        <th>price</th>
+        <th>disconted price</th>
+      </tr>
+
+      {% for item in products %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.unit_price }}</td>
+        <td>{{ item.discounted_price }}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h1>Customers with their last order ID</h1>
+
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>customer id</th>
+        <th>customer name</th>
+        <th>customer last name</th>
+        <th>last order id</th>
+      </tr>
+
+      {% for item in customers %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.last_order }}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+
+    <h1>Collections and count of their products</h1>
+
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>collection id</th>
+        <th>name</th>
+        <th>number of product</th>
+      </tr>
+
+      {% for item in collection %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.count_products }}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+    
+    <h1>Customers with more than 5 orders</h1>
+
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>customer id</th>
+        <th>customer name</th>
+        <th>customer last name</th>
+        <th>number of order</th>
+      </tr>
+
+      {% for item in customers_more_than_5_orders %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.count_orders}}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+
+    <h2>Customers and the total amount they’ve spent</h2>
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>customer id</th>
+        <th>customer name</th>
+        <th>customer last name</th>
+        <th>total spend</th>
+      </tr>
+
+      {% for item in customers_and_total_spent %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.total_spent}}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>Top 5 best-selling products and their total sales</h2>
+        
+    <table>
+      <tr style="background-color: darkslategray; color: aliceblue">
+        <th>product id</th>
+        <th>product name</th>
+        <th>price</th>
+        <th>total sales</th>
+      </tr>
+
+      {% for item in best_selling_products %}
+
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.unit_price }}</td>
+        <td>{{ item.total_sales }}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+
+    
+  </body>
+</html>

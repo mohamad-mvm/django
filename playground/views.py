@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Q ,F,Func,Value
+from django.db.models import Q ,F,Func,Value,ExpressionWrapper,DecimalField,FloatField,IntegerField
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Sum, Avg, Min, Max
-from store.models import Customer, Product,Order,OrderItem
+from store.models import Customer, Product,Order,OrderItem,Collection
 
+
+
+def home(request):
+    return render(request, 'home.html', {})
 
 def database_relational(request):
     products=Product.objects.select_related('collection').all()[:5]
@@ -80,4 +84,48 @@ def Database_Functions(request):
     # make new field in customer model with name 'full_name' that concatenates first_name and last_name using Concat
     customers = Customer.objects.annotate(full_name=Concat('first_name',Value(' '),'last_name'))
 
+    # use below adress for more databese function method
+    # https://docs.djangoproject.com/en/4.0/ref/models/database-functions/
+
     return render(request, 'Database_Functions.html', {'customers':customers,})
+
+
+def Grouping_Data(request):
+    # group customer by number of orders
+    customers = Customer.objects.annotate(count=Count('order'),
+                                           full_name=Concat('first_name',Value(' '),'last_name')).order_by('id')
+
+    return render(request, 'Grouping_Data.html', {'customers':customers,})
+
+def  Expression_Wrappers(request):
+    experetion = ExpressionWrapper(F('unit_price')*0.8, output_field = FloatField())
+    products = Product.objects.annotate(discounted_price=experetion)[:5]
+
+    # Customers with their last order ID
+    customers = Customer.objects.annotate(last_order=Max('order__id'))[:5]
+
+    # Collections and count of their products
+    collection = Collection.objects.annotate(count_products=Count('product'))
+
+    # Customers with more than 5 orders
+    customers_more_than_5_orders = Customer.objects.annotate(count_orders=Count('order')).filter(count_orders__gt=5)
+
+    # Customers and the total amount they’ve spent
+    expression_for_customer=ExpressionWrapper(F('order__orderitem__unit_price') * F('order__orderitem__quantity'), output_field=FloatField())
+    customers_and_total_spent = Customer.objects.annotate(total_spent=Sum(expression_for_customer))[:5]
+
+    # Top 5 best-selling products and their total sales
+    experesion_for_best_selling_products=ExpressionWrapper(F('orderitem__unit_price') * F('orderitem__quantity'), output_field=FloatField())
+    best_selling_products = Product.objects.annotate(total_sales=Sum(experesion_for_best_selling_products)).order_by('-total_sales')[:5]
+
+    
+
+    return render(request, 'Expression_Wrappers.html', {'products':products,
+                                                        'customers':customers,
+                                                        'collection':collection,
+                                                        'customers_more_than_5_orders':customers_more_than_5_orders,
+                                                        'customers_and_total_spent':customers_and_total_spent,
+                                                        'best_selling_products':best_selling_products,})
+
+
+
