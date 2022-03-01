@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q ,F,Func,Value,ExpressionWrapper,DecimalField,FloatField,IntegerField
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Sum, Avg, Min, Max
 from store.models import Customer, Product,Order,OrderItem,Collection
+from tags.models import TaggedItem
 
 
 
@@ -128,5 +130,16 @@ def  Expression_Wrappers(request):
                                                         'customers_and_total_spent':customers_and_total_spent,
                                                         'best_selling_products':best_selling_products,})
 
+
+def Querying_Generic_Relationships(request):
+    # making connection with tags app in generic mode and get all tags that are related to product
+    content_type=ContentType.objects.get_for_model(Product)
+    tags = TaggedItem.objects \
+        .select_related('tag') \
+            .filter(
+                content_type=content_type,
+                object_id=1)
+
+    return render(request, 'Querying_Generic_Relationships.html', {'tags':tags,})
 
 
