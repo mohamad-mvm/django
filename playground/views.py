@@ -133,13 +133,8 @@ def  Expression_Wrappers(request):
 
 def Querying_Generic_Relationships(request):
     # making connection with tags app in generic mode and get all tags that are related to product
-    content_type=ContentType.objects.get_for_model(Product)
-    tags = TaggedItem.objects \
-        .select_related('tag') \
-            .filter(
-                content_type=content_type,
-                object_id=1)
+    tages = TaggedItem.objects.get_tags_for(Product,1)
 
-    return render(request, 'Querying_Generic_Relationships.html', {'tags':tags,})
+    return render(request, 'Querying_Generic_Relationships.html', {'tags':tages,})
 
 
