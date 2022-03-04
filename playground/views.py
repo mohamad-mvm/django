@@ -1,6 +1,7 @@
 from turtle import title
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q ,F,Func,Value,ExpressionWrapper,DecimalField,FloatField,IntegerField
 from django.db.models.functions import Concat
@@ -168,6 +169,39 @@ def Updating_Objects(request):
     Collection.objects.filter(id=11).update(featured_product_id=None)
 
     return render(request, 'Updating_Objects.html', {'collection':collection,})
+
+
+def transaction_test(request):
+    # transaction test
+    with transaction.atomic():
+        order = Order()
+        order.customer_id = 1
+        order.save()
+
+        item = OrderItem()
+        item.order=order
+        item.product_id=1
+        item.quantity=2
+        item.unit_price=10
+        item.save()
+
+    return render(request, 'transaction_test.html', {})
+
+@transaction.atomic
+def transaction_test1(request):
+# transaction test
+    order = Order()
+    order.customer_id = 1
+    order.save()
+
+    item = OrderItem()
+    item.order=order
+    item.product_id=1
+    item.quantity=2
+    item.unit_price=10
+    item.save()
+
+    return render(request, 'transaction_test.html', {})
 
 
 
