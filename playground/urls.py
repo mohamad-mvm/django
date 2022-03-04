@@ -11,4 +11,6 @@ urlpatterns = [
     path('Grouping_Data/', views.Grouping_Data),
     path('Expression_Wrappers/', views.Expression_Wrappers),
     path('Querying_Generic_Relationships/', views.Querying_Generic_Relationships),
+    path('Creating_Objects/', views.Creating_Objects),
+    path('Updating_Objects/', views.Updating_Objects),
 ]

@@ -1,3 +1,4 @@
+from turtle import title
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.contenttypes.models import ContentType
@@ -133,8 +134,40 @@ def  Expression_Wrappers(request):
 
 def Querying_Generic_Relationships(request):
     # making connection with tags app in generic mode and get all tags that are related to product
-    tages = TaggedItem.objects.get_tags_for(Product,1)
+    tages = TaggedItem.objects.get_tags_for(Collection,2)
+
 
     return render(request, 'Querying_Generic_Relationships.html', {'tags':tages,})
+
+def Creating_Objects(request):
+    # create new collection
+    # new_collection = Collection.objects.create(title='video games', featured_product_id=1)
+
+    # collection =collection(title='video games', featured_product_id=1)
+    # collection1.save()
+
+
+    collection1 = Collection()
+    collection1.title='video games'
+    collection1.featured_product_id=1
+    collection1.save()
+    collid =collection1.id
+
+
+
+    return render(request, 'Creating_Objects.html', {'new_collection':collection1,
+                                                    'collid':collid,})
+
+def Updating_Objects(request):
+    # updating new collection
+
+    collection = Collection.objects.get(id=11)
+    collection.featured_product_id=None
+    collection.save()
+
+    Collection.objects.filter(id=11).update(featured_product_id=None)
+
+    return render(request, 'Updating_Objects.html', {'collection':collection,})
+
 
 
