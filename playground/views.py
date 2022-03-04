@@ -1,7 +1,7 @@
 from turtle import title
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db import transaction
+from django.db import transaction,connection
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q ,F,Func,Value,ExpressionWrapper,DecimalField,FloatField,IntegerField
 from django.db.models.functions import Concat
@@ -202,6 +202,31 @@ def transaction_test1(request):
     item.save()
 
     return render(request, 'transaction_test.html', {})
+
+
+def raw_sql(request):
+    # raw sql
+    raw_sql = """
+    SELECT * FROM customer
+    WHERE id = %s
+    """
+    customer = Customer.objects.raw(raw_sql, [1])
+
+    cursor = connection.cursor()
+    cursor.execute(raw_sql, [1])
+    cursor.close()
+
+    with connection.cursor() as cursor:
+        cursor.execute(raw_sql, [1])
+
+    # call stored prosedure in  sql
+    with connection.cursor() as cursor:
+        cursor.callproc('get_customer_by_id', [1])
+
+
+
+    return render(request, 'raw_sql.html', {'customer':customer,})
+
 
 
 
