@@ -223,8 +223,6 @@ def raw_sql(request):
     with connection.cursor() as cursor:
         cursor.callproc('get_customer_by_id', [1])
 
-
-
     return render(request, 'raw_sql.html', {'customer':customer,})
 
 

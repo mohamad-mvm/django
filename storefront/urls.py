@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
+
+
+admin.site.site_header = 'Storefront Administration'
+admin.site.site_title = 'Storefront Admin Portal'
 # hello
 urlpatterns = [
     path('', include('playground.urls')),
