@@ -52,6 +52,9 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+    
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
 
 
 class Order(models.Model):
@@ -68,6 +71,7 @@ class Order(models.Model):
     payment_status = models.CharField(
         max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+
 
 
 class OrderItem(models.Model):
