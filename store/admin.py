@@ -1,3 +1,4 @@
+from dataclasses import fields
 from django.contrib import admin
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
@@ -6,13 +7,31 @@ from django.urls import reverse
 from . import models
 # Register your models here.
 
+# making custom filter for product inventory
+class InventoryFilter(admin.SimpleListFilter):
+    title = 'Inventory'
+    parameter_name = 'inventory'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('<10', 'low'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '<10':
+            return queryset.filter(inventory__lt=10)
+        return queryset
+
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ['title']}
+    autocomplete_fields = ['collection']
     list_display = ['title', 'unit_price', 'inventory',
                          'inventory_status','total_price',
                            'collection']
     list_editable = ['unit_price', 'inventory','collection']
+    list_filter = ['collection','last_update',InventoryFilter]
     ordering = ('title',)
     list_per_page = 10
     list_select_related = ('collection',)
@@ -35,10 +54,26 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'membership']
+    list_display = ['customer_name', 'membership','order_count']
     list_editable = ['membership']
-    ordering = ('first_name', 'last_name')
     list_per_page = 10
+    search_fields = ['first_name__istartswith', 'last_name__istartswith']
+
+    @admin.display(ordering='first_name')
+    def customer_name(self,customer):
+        url = (reverse('admin:store_order_changelist')
+                       + '?'
+                       +urlencode({'customer__id':str(customer.id)}))
+        return format_html('<a href="{}">{} </a>',url,customer.first_name + ' ' + customer.last_name )
+
+    @admin.display(ordering='order_count')
+    def order_count(self,customer):
+        return str(customer.order_count) + ' Order'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.annotate(order_count=Count('order'))
+        return qs
 
 
 @admin.register(models.Order)
@@ -52,7 +87,8 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(models.Collection)
 class collectionAdmin(admin.ModelAdmin):
     list_display = ('title','products_count')
-
+    search_fields = ['title']
+    
     @admin.display(ordering='products_count')
     def products_count(self,collection):
         url = (
